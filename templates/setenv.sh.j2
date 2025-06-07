@@ -1,0 +1,10 @@
+#!/bin/sh
+
+{% if tomcat_environment_variables %}
+{% for env in tomcat_environment_variables %}
+export {{ env.key }}="{{ env.value }}"
+{% endfor %}
+{% endif %}
+
+export JAVA_OPTS="{{ (tomcat_java_opts + tomcat_java_additional_opts) | join(' ') }}"
+export CATALINA_OPTS="{{ (tomcat_catalina_opts + tomcat_catalina_additional_opts) | join(' ') }}"

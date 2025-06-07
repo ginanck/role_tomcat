@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Tomcat {{ tomcat_version }} Server
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment="JAVA_HOME={{ default_java_home_path }}"
+Environment="CATALINA_BASE={{ tomcat_home_link_dir }}"
+Environment="CATALINA_HOME={{ tomcat_home_link_dir }}"
+Environment="CATALINA_PID={{ tomcat_home_link_dir}}/temp/tomcat.pid"
+
+ExecStart={{ tomcat_home_link_dir }}/bin/startup.sh
+ExecStop={{ tomcat_home_link_dir }}/bin/shutdown.sh
+
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

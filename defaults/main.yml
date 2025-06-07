@@ -1,0 +1,86 @@
+---
+# defaults file for role_tomcat
+
+tomcat_user: tomcat
+tomcat_group: tomcat
+tomcat_home_link_dir: "/opt/tomcat"
+tomcat_versioned_dir: "/opt/tomcat-{{ tomcat_version }}"
+
+tomcat_webapp_path: "/opt/webapp.war"
+tomcat_root_path: "{{ tomcat_versioned_dir }}/webapps/ROOT"
+tomcat_root_link_path: "{{ tomcat_versioned_dir }}/webapps/ROOT.war"
+
+tomcat_log_dir: "/var/log/tomcat"
+tomcat_log_link_path: "{{ tomcat_versioned_dir }}/logs"
+
+tomcat_environment_variables: []
+  # - key: JENKINS_HOME
+  #   value: "/opt/jenkins/home"
+
+tomcat_version: "9.0.105"
+tomcat_major_version: "{{ tomcat_version.split('.')[0] }}"
+
+tomcat_download_current_url: "https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+tomcat_download_archive_url: "https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+
+tomcat_java_opts:
+  - '-Xms512m'
+  - '-Xmx512m'
+
+tomcat_java_additional_opts: []
+  # - "-Djava.awt.headless=true"
+  # - "-Duser.timezone={{ jenkins_timezone }}"
+  # - "-Djenkins.install.runSetupWizard=false"
+  # - "-Djenkins.model.Jenkins.buildsDir={{ jenkins_builds_dir }}/\\$\\{ITEM_FULL_NAME\\}"
+  # - "-Djenkins.model.Jenkins.workspacesDir={{ jenkins_workspaces_dir }}/\\$\\{ITEM_FULL_NAME\\}"
+  # - "-Dorg.apache.commons.jelly.tags.fmt.timeZone={{ jenkins_timezone }}"
+  # - "-Dhudson.model.DirectoryBrowserSupport.CSP="
+
+tomcat_catalina_opts:
+  - '-Xms512M'
+  - '-Xmx1024M'
+  - '-server'
+  - '-XX:+UseParallelGC'
+
+tomcat_catalina_additional_opts: []
+  # - '-XX:+UseG1GC'
+  # - '-XX:MaxGCPauseMillis=200'
+  # - '-XX:InitiatingHeapOccupancyPercent=75'
+  # - '-XX:G1HeapRegionSize=4m'
+  # - '-XX:ConcGCThreads=4'
+  # - '-XX:ParallelGCThreads=4'
+  # - '-XX:MinHeapFreeRatio=20'
+  # - '-XX:MaxHeapFreeRatio=80'
+  # - '-XX:+PrintGCDateStamps'
+  # - '-XX:+PrintGCDetails'
+  # - '-XX:+PrintTenuringDistribution'
+  # - '-XX:+PrintGCApplicationStoppedTime'
+  # - '-XX:+HeapDumpOnOutOfMemoryError'
+  # - '-XX:HeapDumpPath=/opt/tomcat/logs'
+  # - '-XX:OnOutOfMemoryError=kill -9 %p'
+
+tomcat_roles:
+  - admin-gui
+  - manager-gui
+  - manager-script
+  - manager-jmx
+  - manager-status
+
+tomcat_users:
+  - username: admin
+    password: secure_pass
+    roles:
+      - admin-gui
+      - manager-gui
+  - username: deployer
+    password: deploy_password
+    roles: [manager-script]
+  - username: monitor
+    password: monitor_pass
+    roles: [manager-status]
+
+tomcat_webapp_manager_remote_access: true
+tomcat_webapp_manager_remote_access_ip_whitelist:
+  - "10\\.50\\.\\d+\\.\\d+"     # VPN network
+  # - "192\\.168\\.\\d+\\.\\d+"   # Corporate network
+  # - "203\\.0\\.113\\.50"        # Specific server
