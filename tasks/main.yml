@@ -175,9 +175,9 @@
     group: "{{ tomcat_group }}"
     force: yes
 
-- name: start tomcat service
+- name: restart tomcat service
   ansible.builtin.systemd_service:
-    state: started
+    state: restarted
     name: tomcat
     daemon_reload: true
     enabled: true
