@@ -63,7 +63,6 @@
         var: ansible_roles_config
       delegate_to: localhost
 
----
 - name: Converge
   hosts: all
   become: true
