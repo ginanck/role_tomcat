@@ -3,6 +3,6 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Example assertion
+    - name: Example Assertion
       ansible.builtin.assert:
         that: true

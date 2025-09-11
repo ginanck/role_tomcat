@@ -1,7 +1,7 @@
 ---
 # handlers file for role_tomcat
 
-- name: restart tomcat
+- name: Restart tomcat
   ansible.builtin.systemd_service:
     state: restarted
     name: tomcat

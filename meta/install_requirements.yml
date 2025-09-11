@@ -1,8 +1,8 @@
 ---
 
 roles:
-  - name: role_java
-    src: git@github.com:ginanck/role_java.git
+  - src: git@github.com:ginanck/role_java.git
+    scm: git
     version: master
 
 collections:
