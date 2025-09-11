@@ -1,8 +1,22 @@
 ---
+- name: Debug Role Paths
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check ANSIBLE_ROLES_PATH
+      debug:
+        msg: "ANSIBLE_ROLES_PATH: {{ ansible_env.ANSIBLE_ROLES_PATH }}"
+        
+    - name: Check if role_tomcat can be found in ../../../
+      shell: ls -la ../../../role_tomcat/tasks/ 2>/dev/null || echo "role_tomcat tasks not found"
+      register: role_check
+      
+    - name: Show role check
+      debug:
+        var: role_check.stdout_lines
+
 - name: Converge
   hosts: all
   become: true
   roles:
-    - role: ../../
-    - role: ../../role_tomcat
-    - role: ../../../role_tomcat
+    - role_tomcat
