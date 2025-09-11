@@ -4,8 +4,6 @@ dependency:
   command: |
     ansible-galaxy role install -r meta/install_requirements.yml -p ./molecule/resources/roles --force
     ansible-galaxy collection install -r meta/install_requirements.yml -p ./molecule/resources/collections --force
-    # Create symlink to current role so it can find itself
-    ln -sf ../../ ./molecule/resources/roles/role_tomcat
 driver:
   name: docker
 platforms:
@@ -24,7 +22,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: ./molecule/resources/roles
+    ANSIBLE_ROLES_PATH: ./molecule/resources/roles:../
     ANSIBLE_COLLECTIONS_PATHS: ./molecule/resources/collections
   inventory:
     host_vars:
