@@ -3,4 +3,4 @@
   hosts: all
   become: true
   roles:
-    - core.role_tomcat
+    - role_tomcat
