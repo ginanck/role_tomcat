@@ -5,7 +5,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-java-almalinux8
+  - name: role-tomcat-almalinux8
     image: quay.io/almalinux/almalinux:8
     pre_build_image: true
     privileged: true
@@ -25,7 +25,7 @@ provisioner:
       roles_path: ./roles
   inventory:
     host_vars:
-      role-java-almalinux8:
+      role-tomcat-almalinux8:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml

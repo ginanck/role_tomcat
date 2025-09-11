@@ -5,7 +5,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-java-ubuntu2404
+  - name: role-tomcat-ubuntu2404
     image: geerlingguy/docker-ubuntu2404-ansible:latest
     pre_build_image: true
     privileged: true
@@ -25,7 +25,7 @@ provisioner:
       roles_path: ./roles
   inventory:
     host_vars:
-      role-java-ubuntu2404:
+      role-tomcat-ubuntu2404:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
