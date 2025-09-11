@@ -4,3 +4,5 @@
   become: true
   roles:
     - role: ../../
+    - role: ../../role_tomcat
+    - role: ../../../role_tomcat
