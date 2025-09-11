@@ -20,8 +20,8 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: "../../roles:../"
-    ANSIBLE_COLLECTIONS_PATHS: "../../collections"
+    ANSIBLE_ROLES_PATH: ./roles
+    ANSIBLE_COLLECTIONS_PATHS: ./collections
   inventory:
     host_vars:
       role-tomcat-almalinux8:
