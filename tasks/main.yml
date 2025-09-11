@@ -74,7 +74,7 @@
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
     mode: '0744'
-  when: 
+  when:
     - tomcat_download_available | bool
     - tomcat_download_url != ""
     - tomcat_install_required | bool
@@ -89,7 +89,7 @@
     remote_src: yes
     extra_opts: [--strip-components=1]
   register: tomcat_unarchive
-  when: 
+  when:
     - tomcat_download_available | bool
     - tomcat_download_url != ""
     - tomcat_install_required | bool
