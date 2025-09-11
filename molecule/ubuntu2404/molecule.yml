@@ -4,6 +4,9 @@ dependency:
   command: |
     ansible-galaxy role install -r meta/install_requirements.yml -p ./roles --force
     ansible-galaxy collection install -r meta/install_requirements.yml -p ./collections --force
+    ls -la
+    env
+    pwd
 driver:
   name: docker
 platforms:
