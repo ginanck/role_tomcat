@@ -2,8 +2,8 @@
 dependency:
   name: shell
   command: |
-    ansible-galaxy role install -r meta/install_requirements.yml -p ./roles --force
-    ansible-galaxy collection install -r meta/install_requirements.yml -p ./collections --force
+    ansible-galaxy role install -r meta/install_requirements.yml -p ./molecule/resources/roles --force
+    ansible-galaxy collection install -r meta/install_requirements.yml -p ./molecule/resources/collections --force
 driver:
   name: docker
 platforms:
@@ -22,8 +22,8 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: ./roles:../
-    ANSIBLE_COLLECTIONS_PATHS: ./collections
+    ANSIBLE_ROLES_PATH: ./molecule/resources/roles:../
+    ANSIBLE_COLLECTIONS_PATHS: ./molecule/resources/collections
   inventory:
     host_vars:
       role-tomcat-almalinux8:
