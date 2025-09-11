@@ -15,6 +15,23 @@
 
     - name: Debug current working directory
       shell: ls -la
+      register: list_dir
+      delegate_to: localhost
+
+    - name: Show role paths results
+      debug:
+        var: list_dir
+      delegate_to: localhost
+
+    - name: Debug current working directory
+      shell: env
+      register: environments
+      delegate_to: localhost
+
+    - name: Show role paths results
+      debug:
+        var: environments
+      delegate_to: localhost
 
 # - name: Converge
 #   hosts: all
