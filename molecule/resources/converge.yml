@@ -16,8 +16,8 @@
     - name: Debug current working directory
       shell: ls -la
 
-- name: Converge
-  hosts: all
-  become: true
-  roles:
-    - role_tomcat
+# - name: Converge
+#   hosts: all
+#   become: true
+#   roles:
+#     - role_tomcat
