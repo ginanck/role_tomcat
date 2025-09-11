@@ -33,8 +33,40 @@
         var: environments
       delegate_to: localhost
 
-# - name: Converge
-#   hosts: all
-#   become: true
-#   roles:
-#     - role_tomcat
+    - name: Debug current working directory
+      shell: env
+      register: environments
+      delegate_to: localhost
+
+    - name: Show role paths results
+      debug:
+        var: environments
+      delegate_to: localhost
+
+    - name: Debug MOLECULE_EPHEMERAL_DIRECTORY contents
+      shell: "ls -la $MOLECULE_EPHEMERAL_DIRECTORY || echo 'MOLECULE_EPHEMERAL_DIRECTORY not set or not accessible'"
+      register: ephemeral_dir_contents
+      delegate_to: localhost
+
+    - name: Show MOLECULE_EPHEMERAL_DIRECTORY contents
+      debug:
+        var: ephemeral_dir_contents
+      delegate_to: localhost
+
+    - name: Check what Ansible sees for roles path
+      shell: "ansible-config dump | grep ROLES_PATH || echo 'Could not get roles path'"
+      register: ansible_roles_config
+      delegate_to: localhost
+
+    - name: Show Ansible roles config
+      debug:
+        var: ansible_roles_config
+      delegate_to: localhost
+
+---
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: ../../
+      name: role_tomcat
