@@ -1,6 +1,6 @@
 ---
-- name: Converge
+- name: Prepare
   hosts: all
   become: true
   roles:
-    - core.role_tomcat
+    - role_java
