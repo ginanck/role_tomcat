@@ -1,4 +1,21 @@
 ---
+- name: Debug Environment
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Debug current working directory
+      shell: pwd
+      register: current_dir
+      delegate_to: localhost
+
+    - name: Show role paths results
+      debug:
+        var: current_dir
+      delegate_to: localhost
+
+    - name: Debug current working directory
+      shell: ls -la
+
 - name: Converge
   hosts: all
   become: true
