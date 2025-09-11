@@ -122,8 +122,15 @@ jobs:
       - name: Install Ansible community.docker collection
         run: ansible-galaxy collection install community.docker:4.7.0 --force
 
-      - name: Run Molecule tests for ${{ matrix.scenario }} scenario
-        run: molecule test -s ${{ matrix.scenario }}
+      - name: Set up SSH for private repositories and run Molecule tests
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          molecule test -s ${{ matrix.scenario }}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
