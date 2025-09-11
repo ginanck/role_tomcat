@@ -19,10 +19,9 @@ platforms:
       - /run/lock
 provisioner:
   name: ansible
-  config_options:
-    defaults:
-      collections_paths: ../../collections
-      roles_path: ../../roles
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
+    ANSIBLE_COLLECTIONS_PATHS: "../../collections"
   inventory:
     host_vars:
       role-tomcat-almalinux8:
