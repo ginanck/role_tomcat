@@ -57,3 +57,6 @@ collections/
 
 # Shared configuration files (managed by pre-commit)
 .config/
+
+# Shared configuration files (managed by pre-commit)
+.configs/
