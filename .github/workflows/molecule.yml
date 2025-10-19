@@ -1,9 +1,43 @@
 ---
 name: molecule
 on:
+  push:
+    branches:
+      - master
   pull_request:
-  schedule:
-    - cron: "0 6 * * *"
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the pipeline on'
+        required: false
+        default: 'master'
+        type: string
+      molecule_scenario:
+        description: 'Molecule scenario to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - default
+          - ubuntu2404
+      python_version:
+        description: 'Python version to use'
+        required: false
+        default: '3.9.23'
+        type: choice
+        options:
+          - '3.9.23'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+      debug_mode:
+        description: 'Enable debug mode for verbose output'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   lint:
@@ -12,72 +46,35 @@ jobs:
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-
-      - name: Check out hooks repository
-        uses: actions/checkout@v4
         with:
-          repository: 'ginanck/hooks_molecule'
-          ref: 'master'
-          path: hooks_molecule
-          token: '${{ secrets.HOOKS_TOKEN }}'
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python 3.9.23
+      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.23'
+          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
 
-      - name: Install test dependencies from hooks repository
+      - name: Download linter configurations
         run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
-          else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
-          fi
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o ansible-lint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o yamllint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o flake8.conf
 
-      - name: ansible-lint
+      - name: Install linter dependencies
         run: |
-          # Check for local ansible-lint config first, then fallback to hooks
-          if [ -f ".ansible-lint" ]; then
-            echo "Using local .ansible-lint configuration"
-            ansible-lint .
-          elif [ -f "hooks_molecule/ansible-lint.conf" ]; then
-            echo "Using external ansible-lint configuration"
-            ansible-lint -c hooks_molecule/ansible-lint.conf .
-          else
-            echo "No configuration found, running with defaults"
-            ansible-lint .
-          fi
+          pip3 install ansible-lint yamllint flake8
 
-      - name: yamllint
+      - name: Run ansible-lint
         run: |
-          # Check for local yamllint config first, then fallback to hooks
-          if [ -f ".yamllint" ] || [ -f ".yamllint.yml" ] || [ -f ".yamllint.yaml" ]; then
-            echo "Using local yamllint configuration"
-            yamllint .
-          elif [ -f "hooks_molecule/yamllint.conf" ]; then
-            echo "Using external yamllint configuration"
-            yamllint -c hooks_molecule/yamllint.conf .
-          else
-            echo "No configuration found, running with defaults"
-            yamllint .
-          fi
+          ansible-lint -c ansible-lint.yml .
 
-      - name: flake8
+      - name: Run yamllint
         run: |
-          # Check for local flake8 config first, then fallback to hooks
-          if [ -f ".flake8" ] || [ -f "setup.cfg" ]; then
-            echo "Using local flake8 configuration"
-            flake8 .
-          elif [ -f "hooks_molecule/flake8.conf" ]; then
-            echo "Using external flake8 configuration"
-            flake8 --config=hooks_molecule/flake8.conf .
-          else
-            echo "No configuration found, running with defaults"
-            flake8 .
-          fi
+          yamllint -c yamllint.yml .
+
+      - name: Run flake8
+        run: |
+          flake8 --config=flake8.conf .
 
   molecule:
     name: Molecule
@@ -86,51 +83,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario:
-          - default
-          - ubuntu2404
+        scenario: ${{ (github.event.inputs.molecule_scenario || 'all') == 'all' && fromJson('["default", "ubuntu2404"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'all')) }}
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-
-      - name: Check out hooks repository
-        uses: actions/checkout@v4
         with:
-          repository: 'ginanck/hooks_molecule'
-          ref: 'master'
-          path: hooks_molecule
-          token: '${{ secrets.HOOKS_TOKEN }}'
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python 3.9.23
+      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.23'
+          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
 
-      - name: Install test dependencies from hooks repository
+      - name: Install minimal test dependencies
         run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
+          pip3 install ansible molecule molecule-docker docker
+
+      - name: Run Molecule tests for ${{ matrix.scenario }} scenario
+        run: |
+          ansible-galaxy collection install community.docker:4.8.1 --force
+
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
+            molecule test -s ${{ matrix.scenario }} --debug
           else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
+            molecule test -s ${{ matrix.scenario }}
           fi
-
-      - name: Install Ansible community.docker collection
-        run: ansible-galaxy collection install community.docker:4.7.0 --force
-
-      - name: Set up SSH for private repositories and run Molecule tests
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          molecule test -s ${{ matrix.scenario }}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
