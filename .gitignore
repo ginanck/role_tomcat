@@ -54,3 +54,6 @@ molecule/resources/collections/
 roles/
 collections/
 
+
+# Shared configuration files (managed by pre-commit)
+.config/
