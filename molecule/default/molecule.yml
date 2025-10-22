@@ -7,8 +7,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-tomcat-almalinux8
-    image: quay.io/almalinux/almalinux:8
+  - name: role-tomcat-almalinux-8
+    image: ghcr.io/ginanck/molecule-almalinux:8-latest
     pre_build_image: true
     privileged: true
     volumes:
@@ -23,10 +23,10 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_ROLES_PATH: ../../roles:../../../
-    ANSIBLE_COLLECTIONS_PATHS: ../../collections
+    ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-tomcat-almalinux8:
+      role-tomcat-almalinux-8:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
@@ -43,7 +43,7 @@ scenario:
     - create
     - prepare
     - converge
-    # - idempotence
+    - idempotence
     - side_effect
     - verify
     - cleanup
