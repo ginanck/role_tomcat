@@ -17,7 +17,7 @@ on:
         options:
           - all
           - default
-          - ubuntu2404
+          - ubuntu-2404
       debug_mode:
         description: 'Enable debug mode for verbose output'
         required: false
@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ (github.event.inputs.molecule_scenario || 'all') == 'all' && fromJson('["default", "ubuntu2404"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'all')) }}
+        scenario: ${{ (github.event.inputs.molecule_scenario || 'all') == 'all' && fromJson('["default", "ubuntu-2404"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'all')) }}
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
@@ -76,7 +76,7 @@ jobs:
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
-            molecule --debug test -s ${{ matrix.scenario }}
+            molecule --debug -vvv test -s ${{ matrix.scenario }}
           else
             molecule test -s ${{ matrix.scenario }}
           fi
