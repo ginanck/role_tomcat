@@ -86,62 +86,64 @@ ansible-galaxy install -r meta/install_requirements.yml
 
 ## Role Variables
 
+**These are static variables with lower priority**
 
 
-### File: `defaults/main.yml`
 
-| Variable | Default Value | Description |
-|----------|---------------|-------------|
-| `tomcat_user` | `tomcat` | None |
-| `tomcat_group` | `tomcat` | None |
-| `tomcat_home_link_dir` | `/opt/tomcat` | None |
-| `tomcat_versioned_dir` | `/opt/tomcat-{{ tomcat_version }}` | None |
-| `tomcat_webapp_path` | `/opt/webapp.war` | None |
-| `tomcat_root_path` | `{{ tomcat_versioned_dir }}/webapps/ROOT` | None |
-| `tomcat_root_link_path` | `{{ tomcat_versioned_dir }}/webapps/ROOT.war` | None |
-| `tomcat_log_dir` | `/var/log/tomcat` | None |
-| `tomcat_log_link_path` | `{{ tomcat_versioned_dir }}/logs` | None |
-| `tomcat_environment_variables` | `[]` | None |
-| `tomcat_version` | `9.0.105` | None |
-| `tomcat_major_version` | `{{ tomcat_version.split('.')[0] }}` | None |
-| `tomcat_download_current_url` | `https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz` | None |
-| `tomcat_download_archive_url` | `https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz` | None |
-| `tomcat_java_opts` | `[]` | None |
-| `tomcat_java_opts.0` | `-Xms512m` | None |
-| `tomcat_java_opts.1` | `-Xmx512m` | None |
-| `tomcat_java_additional_opts` | `[]` | None |
-| `tomcat_catalina_opts` | `[]` | None |
-| `tomcat_catalina_opts.0` | `-Xms512M` | None |
-| `tomcat_catalina_opts.1` | `-Xmx1024M` | None |
-| `tomcat_catalina_opts.2` | `-server` | None |
-| `tomcat_catalina_opts.3` | `-XX:+UseParallelGC` | None |
-| `tomcat_catalina_additional_opts` | `[]` | None |
-| `tomcat_roles` | `[]` | None |
-| `tomcat_roles.0` | `admin-gui` | None |
-| `tomcat_roles.1` | `manager-gui` | None |
-| `tomcat_roles.2` | `manager-script` | None |
-| `tomcat_roles.3` | `manager-jmx` | None |
-| `tomcat_roles.4` | `manager-status` | None |
-| `tomcat_users` | `[]` | None |
-| `tomcat_users.0` | `{}` | None |
-| `tomcat_users.0.username` | `admin` | None |
-| `tomcat_users.0.password` | `secure_pass` | None |
-| `tomcat_users.0.roles` | `[]` | None |
-| `tomcat_users.0.roles.0` | `admin-gui` | None |
-| `tomcat_users.0.roles.1` | `manager-gui` | None |
-| `tomcat_users.1` | `{}` | None |
-| `tomcat_users.1.username` | `deployer` | None |
-| `tomcat_users.1.password` | `deploy_password` | None |
-| `tomcat_users.1.roles` | `[]` | None |
-| `tomcat_users.1.roles.0` | `manager-script` | None |
-| `tomcat_users.2` | `{}` | None |
-| `tomcat_users.2.username` | `monitor` | None |
-| `tomcat_users.2.password` | `monitor_pass` | None |
-| `tomcat_users.2.roles` | `[]` | None |
-| `tomcat_users.2.roles.0` | `manager-status` | None |
-| `tomcat_webapp_manager_remote_access` | `True` | None |
-| `tomcat_webapp_manager_remote_access_ip_whitelist` | `[]` | None |
-| `tomcat_webapp_manager_remote_access_ip_whitelist.0` | `10\.50\.\d+\.\d+` | None |
+#### File: defaults/main.yml
+
+| Var | Type | Value |
+|-----|------|-------|
+| [tomcat_catalina_additional_opts](defaults/main.yml#L45) | list |  |
+| [tomcat_catalina_opts](defaults/main.yml#L39) | list |  |
+| [tomcat_catalina_opts.0](defaults/main.yml#L40) | str | `-Xms512M` |
+| [tomcat_catalina_opts.1](defaults/main.yml#L41) | str | `-Xmx1024M` |
+| [tomcat_catalina_opts.2](defaults/main.yml#L42) | str | `-server` |
+| [tomcat_catalina_opts.3](defaults/main.yml#L43) | str | `-XX:+UseParallelGC` |
+| [tomcat_download_archive_url](defaults/main.yml#L24) | str | `https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz` |
+| [tomcat_download_current_url](defaults/main.yml#L23) | str | `https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz` |
+| [tomcat_environment_variables](defaults/main.yml#L16) | list |  |
+| [tomcat_group](defaults/main.yml#L5) | str | `tomcat` |
+| [tomcat_home_link_dir](defaults/main.yml#L6) | str | `/opt/tomcat` |
+| [tomcat_java_additional_opts](defaults/main.yml#L30) | list |  |
+| [tomcat_java_opts](defaults/main.yml#L26) | list |  |
+| [tomcat_java_opts.0](defaults/main.yml#L27) | str | `-Xms512m` |
+| [tomcat_java_opts.1](defaults/main.yml#L28) | str | `-Xmx512m` |
+| [tomcat_log_dir](defaults/main.yml#L13) | str | `/var/log/tomcat` |
+| [tomcat_log_link_path](defaults/main.yml#L14) | str | `{{ tomcat_versioned_dir }}/logs` |
+| [tomcat_major_version](defaults/main.yml#L21) | str | `{{ tomcat_version.split('.')[0] }}` |
+| [tomcat_roles](defaults/main.yml#L62) | list |  |
+| [tomcat_roles.0](defaults/main.yml#L63) | str | `admin-gui` |
+| [tomcat_roles.1](defaults/main.yml#L64) | str | `manager-gui` |
+| [tomcat_roles.2](defaults/main.yml#L65) | str | `manager-script` |
+| [tomcat_roles.3](defaults/main.yml#L66) | str | `manager-jmx` |
+| [tomcat_roles.4](defaults/main.yml#L67) | str | `manager-status` |
+| [tomcat_root_link_path](defaults/main.yml#L11) | str | `{{ tomcat_versioned_dir }}/webapps/ROOT.war` |
+| [tomcat_root_path](defaults/main.yml#L10) | str | `{{ tomcat_versioned_dir }}/webapps/ROOT` |
+| [tomcat_user](defaults/main.yml#L4) | str | `tomcat` |
+| [tomcat_users](defaults/main.yml#L69) | list |  |
+| [tomcat_users.0](defaults/main.yml#L70) | dict |  |
+| [tomcat_users.0.password](defaults/main.yml#L71) | str | `secure_pass` |
+| [tomcat_users.0.roles](defaults/main.yml#L72) | list |  |
+| [tomcat_users.0.roles.0](defaults/main.yml#L73) | str | `admin-gui` |
+| [tomcat_users.0.roles.1](defaults/main.yml#L74) | str | `manager-gui` |
+| [tomcat_users.0.username](defaults/main.yml#L70) | str | `admin` |
+| [tomcat_users.1](defaults/main.yml#L75) | dict |  |
+| [tomcat_users.1.password](defaults/main.yml#L76) | str | `deploy_password` |
+| [tomcat_users.1.roles](defaults/main.yml#L77) | list |  |
+| [tomcat_users.1.roles.0](defaults/main.yml#L77) | str | `manager-script` |
+| [tomcat_users.1.username](defaults/main.yml#L75) | str | `deployer` |
+| [tomcat_users.2](defaults/main.yml#L78) | dict |  |
+| [tomcat_users.2.password](defaults/main.yml#L79) | str | `monitor_pass` |
+| [tomcat_users.2.roles](defaults/main.yml#L80) | list |  |
+| [tomcat_users.2.roles.0](defaults/main.yml#L80) | str | `manager-status` |
+| [tomcat_users.2.username](defaults/main.yml#L78) | str | `monitor` |
+| [tomcat_version](defaults/main.yml#L20) | str | `9.0.105` |
+| [tomcat_versioned_dir](defaults/main.yml#L7) | str | `/opt/tomcat-{{ tomcat_version }}` |
+| [tomcat_webapp_manager_remote_access](defaults/main.yml#L82) | bool | `True` |
+| [tomcat_webapp_manager_remote_access_ip_whitelist](defaults/main.yml#L83) | list |  |
+| [tomcat_webapp_manager_remote_access_ip_whitelist.0](defaults/main.yml#L83) | str | `10\.50\.\d+\.\d+` |
+| [tomcat_webapp_path](defaults/main.yml#L9) | str | `/opt/webapp.war` |
 
 
 
@@ -152,37 +154,40 @@ ansible-galaxy install -r meta/install_requirements.yml
 This role performs the following tasks:
 
 
-### `main.yml`
+### File: `tasks/main.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Create tomcat group](tasks/main.yml#L) | ansible.builtin.group | No | N/A |
+| [Create tomcat user](tasks/main.yml#L) | ansible.builtin.user | No | N/A |
+| [Check current download URL status](tasks/main.yml#L) | ansible.builtin.uri | No | N/A |
+| [Check archive download URL status](tasks/main.yml#L) | ansible.builtin.uri | Yes | N/A |
+| [Set download url and availability facts](tasks/main.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Check If Expected Tomcat Version Is Already Installed](tasks/main.yml#L) | ansible.builtin.stat | No | N/A |
+| [Get Installed Tomcat Version](tasks/main.yml#L) | ansible.builtin.slurp | Yes | N/A |
+| [Set Installation Required Fact](tasks/main.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Create Tomcat Versioned Directory](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Download And Extract Tomcat](tasks/main.yml#L) | ansible.builtin.unarchive | Yes | N/A |
+| [Create version file](tasks/main.yml#L) | ansible.builtin.copy | Yes | N/A |
+| [Check If Folder Exists](tasks/main.yml#L) | ansible.builtin.stat | No | N/A |
+| [Create/Update Symbolic Link To Active Tomcat Version](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Get Default Java Path](tasks/main.yml#L) | ansible.builtin.stat | No | N/A |
+| [Set Java Home Path](tasks/main.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Create Tomcat Service File](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Create Setenv.sh](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Create Tomcat Users And Roles](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Configure Manager/META-INF/Context.xml](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Configure Host-Manager/META-INF/Context.xml](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Check current ROOT link status](tasks/main.yml#L) | ansible.builtin.stat | No | N/A |
+| [Remove Existing ROOT.war If Present](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Create Link For Webapp To ROOT.war](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Create Tomcat Log Directory](tasks/main.yml#L) | ansible.builtin.file | No | N/A |
+| [Check current log link status](tasks/main.yml#L) | ansible.builtin.stat | No | N/A |
+| [Remove existing Tomcat logs directory](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Create Log Dir Symbolic Link](tasks/main.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Start Tomcat Service](tasks/main.yml#L) | ansible.builtin.systemd_service | No | N/A |
 
 
-- **Create tomcat group**
-- **Create tomcat user**
-- **Check current download URL status**
-- **Check archive download URL status**
-- **Set download url and availability facts**
-- **Check If Expected Tomcat Version Is Already Installed**
-- **Get Installed Tomcat Version**
-- **Set Installation Required Fact**
-- **Create Tomcat Versioned Directory**
-- **Download And Extract Tomcat**
-- **Create version file**
-- **Check If Folder Exists**
-- **Create/Update Symbolic Link To Active Tomcat Version**
-- **Get Default Java Path**
-- **Set Java Home Path**
-- **Create Tomcat Service File**
-- **Create Setenv.sh**
-- **Create Tomcat Users And Roles**
-- **Configure Manager/META-INF/Context.xml**
-- **Configure Host-Manager/META-INF/Context.xml**
-- **Check current ROOT link status**
-- **Remove Existing ROOT.war If Present**
-- **Create Link For Webapp To ROOT.war**
-- **Create Tomcat Log Directory**
-- **Check current log link status**
-- **Remove existing Tomcat logs directory**
-- **Create Log Dir Symbolic Link**
-- **Start Tomcat Service**
 
 
 
@@ -202,41 +207,6 @@ This role performs the following tasks:
         tomcat_home_link_dir: /opt/tomcat
 
 ```
-
-## Documentation Maintenance
-
-### Updating Dependencies
-
-1. **Update** `meta/main.yml`:
-   ```yaml
-   documented_requirements:
-     - src: https://github.com/user/role.git
-       version: master
-     - name: collection.name
-       version: 1.0.0
-   ```
-
-2. **Sync** `meta/install_requirements.yml` with the same requirements
-
-3. **Regenerate** documentation:
-   ```bash
-   pre-commit run --all-files
-   ```
-
-### Template Updates
-
-- Edit `.docsible_template.md` for structure changes
-- Test with: `docsible --role . --md-template .docsible_template.md -nob -com -tl`
-- Commit both template and generated README.md
-
-### Quick Checklist
-
-When updating dependencies:
-- [ ] Add to `meta/main.yml` → `documented_requirements`
-- [ ] Add to `meta/install_requirements.yml`
-- [ ] Run `pre-commit run --all-files`
-- [ ] Verify generated README.md
-- [ ] Commit all changes
 
 ## License
 
